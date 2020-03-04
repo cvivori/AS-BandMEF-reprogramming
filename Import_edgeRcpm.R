@@ -125,7 +125,7 @@ dim(BM_CPMs_fil); dim(BM_CPMs_av_fil)
 
 
 
-#### SCALED
+#### SCALE VALUES
 ## SCALE SINGLE REPLICATE VALUES
 B_CPMs_scaled <- t(scale(t(B_CPMs)))
 head(B_CPMs_scaled)
@@ -135,33 +135,39 @@ head(M_CPMs_scaled)
 sum(is.na(B_CPMs_scaled)); sum(is.na(M_CPMs_scaled))
 dim(B_CPMs_scaled); dim(M_CPMs_scaled)
 
-fil_B_CPMs_scaled <- t(scale(t(fil_B_CPMs)))
-dim(fil_B_CPMs_scaled)
-head(fil_B_CPMs_scaled)
-sum(is.na(fil_B_CPMs_scaled))
-fil_M_CPMs_scaled <- t(scale(t(fil_M_CPMs)))
-dim(fil_M_CPMs_scaled)
-head(fil_M_CPMs_scaled)
-sum(is.na(fil_M_CPMs_scaled))
+
+## SCALE SINGLE REPLICATE VALUES AFTER FILTERING
+B_CPMs_fil_scaled <- t(scale(t(B_CPMs_fil)))
+head(B_CPMs_fil_scaled)
+M_CPMs_fil_scaled <- t(scale(t(M_CPMs_fil)))
+head(M_CPMs_fil_scaled)
+
+sum(is.na(B_CPMs_fil_scaled));sum(is.na(M_CPMs_fil_scaled))
+dim(B_CPMs_fil_scaled); dim(M_CPMs_fil_scaled)
+
 
 ## SCALE AVERAGE VALUES
 B_CPMs_av_scaled <- t(scale(t(B_CPMs_av)))
-dim(B_CPMs_av_scaled)
 head(B_CPMs_av_scaled)
-sum(is.na(B_CPMs_av_scaled))
 M_CPMs_av_scaled <- t(scale(t(M_CPMs_av)))
-dim(M_CPMs_av_scaled)
 head(M_CPMs_av_scaled)
-sum(is.na(M_CPMs_av_scaled))
 
-fil_B_CPMs_av_scaled <- t(scale(t(fil_B_CPMs_av)))
-dim(fil_B_CPMs_av_scaled)
-head(fil_B_CPMs_scaled)
-sum(is.na(fil_B_CPMs_scaled))
-fil_M_CPMs_av_scaled <- t(scale(t(fil_M_CPMs_av)))
-dim(fil_M_CPMs_av_scaled)
-head(fil_M_CPMs_av_scaled)
-sum(is.na(fil_M_CPMs_scaled))
+sum(is.na(B_CPMs_av_scaled)); sum(is.na(M_CPMs_av_scaled))
+dim(B_CPMs_av_scaled); dim(M_CPMs_av_scaled)
+
+
+## SCALE AVERAGE VALUES AFTER FILTERING
+B_CPMs_av_fil_scaled <- t(scale(t(B_CPMs_av_fil)))
+head(B_CPMs_av_fil_scaled)
+M_CPMs_av_fil_scaled <- t(scale(t(M_CPMs_av_fil)))
+head(M_CPMs_av_fil_scaled)
+
+sum(is.na(B_CPMs_av_fil_scaled)); sum(is.na(M_CPMs_av_fil_scaled))
+dim(B_CPMs_av_fil_scaled); dim(M_CPMs_av_fil_scaled)
+
+
+
+
 
 
 ## MERGE IN BIG TABLEs WITH BOTH DATASETS
@@ -177,7 +183,7 @@ BM_CPMs_av_scaled <- BM_CPMs_av_scaled %>% dplyr::select(-Row.names)
 head(BM_CPMs_av_scaled)
 dim(BM_CPMs_av_scaled)
 
-BM_fil_CPMs_av_scaled <- (merge(x=fil_B_CPMs_av_scaled, y=fil_M_CPMs_av_scaled, by="row.names",all=T))
+BM_fil_CPMs_av_scaled <- (merge(x=B_CPMs_av_fil_scaled, y=M_CPMs_av_fil_scaled, by="row.names",all=T))
 rownames(BM_fil_CPMs_av_scaled) <- BM_fil_CPMs_av_scaled$Row.names
 BM_fil_CPMs_av_scaled <- BM_fil_CPMs_av_scaled %>% dplyr::select(-Row.names)
 head(BM_fil_CPMs_av_scaled)
@@ -188,7 +194,7 @@ dim(BM_fil_CPMs_av_scaled)
 message("Outputs for B and MEFs:
         * all tables are filtered by min 5 cpm (in 5/6 samples = 33%) 
         * _av tables contain average values among replicates
-        fil_B_CPMs & fil_M_CPMs = cpm values, filtered for coeff.var 0.2
+        * _fil tables are also filtered for coeff.var >= 0.2
         fil_B_CPMs_scaled & fil_M_CPMs_scaled = scaled cpm values, filtered 
         BM_fil_CPMs = cpm values of genes expressed in both dataset
         BM_fil_CPMs_scaled = scaled cpm values of genes expressed in both dataset
