@@ -106,14 +106,12 @@ M_INCL_dPSI10=read.table(file="Filtered_INCLUSION_LEVELS_FULL-Mm237_maxN_0_noB_w
 rownames(M_INCL_dPSI10) <- M_INCL_dPSI10$EVENT
 colnames(M_INCL_dPSI10) <- gsub("_ALT_use25_","-",colnames(M_INCL_dPSI10))
 summary(M_INCL_dPSI10$freq_N_sr)   #check that filtering 
-head(M_INCL_dPSI10)
   #dPSI15
 setwd ("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/1601 CEBPa_NEW/VASTTOOLS_v2.2_FINAL_Mm10/MEFs2iPS/dPSI15/")
 M_INCL_dPSI15=read.table(file="Filtered_INCLUSION_LEVELS_FULL-Mm237_maxN_0_noB_withdPSI_21DiffAS.txt",header = T, sep="\t",fill=T)
 rownames(M_INCL_dPSI15) <- M_INCL_dPSI15$EVENT
 colnames(M_INCL_dPSI15) <- gsub("_ALT_use25_","-",colnames(M_INCL_dPSI15))
 summary(M_INCL_dPSI15$freq_N_sr)   #check that filtering 
-head(M_INCL_dPSI15)
   #dPSI with no N filtering
 setwd ("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/1601 CEBPa_NEW/VASTTOOLS_v2.2_FINAL_Mm10/MEFs2iPS/dPSI10/")
 NonFil_M_INCL_dPSI10=read.table(file="INCLUSION_LEVELS_FULL-Mm237_withdPSI_21DiffAS.txt",header = T, sep="\t",fill=T)
