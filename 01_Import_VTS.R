@@ -191,10 +191,6 @@ M_PSIs_VTS_av <-lapply(M_PSIs_VTS, function(y) { df = data.frame (
 return(df)})
 
 
-## TABLE WITH PSIs IN BOTH
-BM_PSIs_VTS <- lapply(B_diffEV, function(x) x[,PSIcols])
-lapply(BM_PSIs_VTS, dim)
-head(BM_PSIs_VTS$dPSI10)
   
 
 
