@@ -9,3 +9,6 @@ Scripts for AS analysis
 - Extract gene expression profiles from RNA-binding proteins and splicing factors (Uniprot)
 - Count and extract different types of AS events
 - Melt dataframes for plots
+
+**03. Plots**
+- Plot heatmap with correlation of B cell reprogramming stages
