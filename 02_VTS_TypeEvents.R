@@ -36,8 +36,7 @@ B_diffEV_list <- lapply(B_diffEV, function(x) { y = list(CEx = x %>% filter(COMP
                                             return(y) })
 lapply(B_diffEV_list$dPSI10, length)
 
-M_diffEV_list <- lapply(M_diffEV, function(x) { y = list(ALL = x$EVENT, 
-                                                     CEx = x %>% filter(COMPLEX %in% c("S","C1","C2","C3","ANN","MIC")),
+M_diffEV_list <- lapply(M_diffEV, function(x) { y = list(CEx = x %>% filter(COMPLEX %in% c("S","C1","C2","C3","ANN","MIC")),
                                                      #MIC = x %>% filter(COMPLEX == "MIC"),
                                                      RI = x %>% filter(COMPLEX %in% c("IR-S","IR-C","IR")),
                                                      Alt3 = x %>% filter(COMPLEX == "Alt3"),
@@ -131,17 +130,15 @@ rm(tmpB); rm(tmpM)
   ## EXTRACT PSIs of EACH SET OF EXONS in B/M_PSIs_VTS - including GENEname
   B_PSIs_VTS_list = M_PSIs_VTS_list = list()
   for (d in names(B_PSIs_VTS)) { 
-    B_PSIs_VTS_list[[d]] <- list(CEx = subset(B_PSIs_VTS[[d]], row.names(B_PSIs_VTS[[d]]) %in% B_EV_list[[d]]$CEx),
-                                 #MIC = subset(B_PSIs_VTS[[d]], row.names(B_PSIs_VTS[[d]]) %in% B_EV_list[[d]]$MIC),
-                                 RI = subset(B_PSIs_VTS[[d]], row.names(B_PSIs_VTS[[d]]) %in% B_EV_list[[d]]$RI),
-                                 Alt3 = subset(B_PSIs_VTS[[d]], row.names(B_PSIs_VTS[[d]]) %in% B_EV_list[[d]]$Alt3),
-                                 Alt5 = subset(B_PSIs_VTS[[d]], row.names(B_PSIs_VTS[[d]]) %in% B_EV_list[[d]]$Alt5)) }
+    B_PSIs_VTS_list[[d]] <- list(CEx = subset(B_PSIs_VTS[[d]], row.names(B_PSIs_VTS[[d]]) %in% B_diffEV_list[[d]]$CEx$EVENT),
+                                 RI = subset(B_PSIs_VTS[[d]], row.names(B_PSIs_VTS[[d]]) %in% B_diffEV_list[[d]]$RI$EVENT),
+                                 Alt3 = subset(B_PSIs_VTS[[d]], row.names(B_PSIs_VTS[[d]]) %in% B_diffEV_list[[d]]$Alt3$EVENT),
+                                 Alt5 = subset(B_PSIs_VTS[[d]], row.names(B_PSIs_VTS[[d]]) %in% B_diffEV_list[[d]]$Alt5$EVENT)) }
   for (d in names(M_PSIs_VTS)) { 
-    M_PSIs_VTS_list[[d]] <- list(CEx = subset(M_PSIs_VTS[[d]], row.names(M_PSIs_VTS[[d]]) %in% M_EV_list[[d]]$CEx),
-                                 #MIC = subset(M_PSIs_VTS[[d]], row.names(M_PSIs_VTS[[d]]) %in% M_EV_list[[d]]$MIC),
-                                 RI = subset(M_PSIs_VTS[[d]], row.names(M_PSIs_VTS[[d]]) %in% M_EV_list[[d]]$RI),
-                                 Alt3 = subset(M_PSIs_VTS[[d]], row.names(M_PSIs_VTS[[d]]) %in% M_EV_list[[d]]$Alt3),
-                                 Alt5 = subset(M_PSIs_VTS[[d]], row.names(M_PSIs_VTS[[d]]) %in% M_EV_list[[d]]$Alt5)) }
+    M_PSIs_VTS_list[[d]] <- list(CEx = subset(M_PSIs_VTS[[d]], row.names(M_PSIs_VTS[[d]]) %in% M_diffEV_list[[d]]$CEx$EVENT),
+                                 RI = subset(M_PSIs_VTS[[d]], row.names(M_PSIs_VTS[[d]]) %in% M_diffEV_list[[d]]$RI$EVENT),
+                                 Alt3 = subset(M_PSIs_VTS[[d]], row.names(M_PSIs_VTS[[d]]) %in% M_diffEV_list[[d]]$Alt3$EVENT),
+                                 Alt5 = subset(M_PSIs_VTS[[d]], row.names(M_PSIs_VTS[[d]]) %in% M_diffEV_list[[d]]$Alt5$EVENT)) }
   
   lapply(B_PSIs_VTS_list$dPSI10, dim)
   lapply(M_PSIs_VTS_list$dPSI10, dim)
@@ -150,17 +147,15 @@ rm(tmpB); rm(tmpM)
   ## EXTRACT AVERAGE PSIs EACH SET OF EXONS in B/M_PSIs_VTS_av_av
   B_PSIs_VTS_av_list = M_PSIs_VTS_av_list = list()
   for (d in names(B_PSIs_VTS_av)) { 
-    B_PSIs_VTS_av_list[[d]] <- list(CEx = subset(B_PSIs_VTS_av[[d]], row.names(B_PSIs_VTS_av[[d]]) %in% B_EV_list[[d]]$CEx),
-                                    #MIC = subset(B_PSIs_VTS_av[[d]], row.names(B_PSIs_VTS_av[[d]]) %in% B_EV_list[[d]]$MIC),
-                                    RI = subset(B_PSIs_VTS_av[[d]], row.names(B_PSIs_VTS_av[[d]]) %in% B_EV_list[[d]]$RI),
-                                    Alt3 = subset(B_PSIs_VTS_av[[d]], row.names(B_PSIs_VTS_av[[d]]) %in% B_EV_list[[d]]$Alt3),
-                                    Alt5 = subset(B_PSIs_VTS_av[[d]], row.names(B_PSIs_VTS_av[[d]]) %in% B_EV_list[[d]]$Alt5)) }
+    B_PSIs_VTS_av_list[[d]] <- list(CEx = subset(B_PSIs_VTS_av[[d]], row.names(B_PSIs_VTS_av[[d]]) %in% B_diffEV_list[[d]]$CEx$EVENT),
+                                    RI = subset(B_PSIs_VTS_av[[d]], row.names(B_PSIs_VTS_av[[d]]) %in% B_diffEV_list[[d]]$RI$EVENT),
+                                    Alt3 = subset(B_PSIs_VTS_av[[d]], row.names(B_PSIs_VTS_av[[d]]) %in% B_diffEV_list[[d]]$Alt3$EVENT),
+                                    Alt5 = subset(B_PSIs_VTS_av[[d]], row.names(B_PSIs_VTS_av[[d]]) %in% B_diffEV_list[[d]]$Alt5$EVENT)) }
   for (d in names(M_PSIs_VTS_av)) { 
-    M_PSIs_VTS_av_list[[d]] <- list(CEx = subset(M_PSIs_VTS_av[[d]], row.names(M_PSIs_VTS_av[[d]]) %in% M_EV_list[[d]]$CEx),
-                                    #MIC = subset(M_PSIs_VTS_av[[d]], row.names(M_PSIs_VTS_av[[d]]) %in% M_EV_list[[d]]$MIC),
-                                    RI = subset(M_PSIs_VTS_av[[d]], row.names(M_PSIs_VTS_av[[d]]) %in% M_EV_list[[d]]$RI),
-                                    Alt3 = subset(M_PSIs_VTS_av[[d]], row.names(M_PSIs_VTS_av[[d]]) %in% M_EV_list[[d]]$Alt3),
-                                    Alt5 = subset(M_PSIs_VTS_av[[d]], row.names(M_PSIs_VTS_av[[d]]) %in% M_EV_list[[d]]$Alt5)) }
+    M_PSIs_VTS_av_list[[d]] <- list(CEx = subset(M_PSIs_VTS_av[[d]], row.names(M_PSIs_VTS_av[[d]]) %in% M_diffEV_list[[d]]$CEx$EVENT),
+                                    RI = subset(M_PSIs_VTS_av[[d]], row.names(M_PSIs_VTS_av[[d]]) %in% M_diffEV_list[[d]]$RI$EVENT),
+                                    Alt3 = subset(M_PSIs_VTS_av[[d]], row.names(M_PSIs_VTS_av[[d]]) %in% M_diffEV_list[[d]]$Alt3$EVENT),
+                                    Alt5 = subset(M_PSIs_VTS_av[[d]], row.names(M_PSIs_VTS_av[[d]]) %in% M_diffEV_list[[d]]$Alt5$EVENT)) }
   lapply(B_PSIs_VTS_av_list$dPSI10, dim)
   lapply(M_PSIs_VTS_av_list$dPSI10, dim)
   head(M_PSIs_VTS_av_list$dPSI10$CEx)  
