@@ -12,3 +12,4 @@ Scripts for AS analysis
 
 **03. Plots**
 - Plot heatmap with correlation of B cell reprogramming stages
+- Plot types of AS events (area plot, barplot and heatmap)
