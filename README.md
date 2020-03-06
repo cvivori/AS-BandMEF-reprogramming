@@ -18,3 +18,6 @@ Scripts for AS analysis
 **04. Clustering**
 - Mfuzz (Kumar et al., 2007) clustering of differentially spliced cassette exons
 - Correlation of gene expression profiles of genes containing the exons to each AS cluster
+
+**05. Analyses on AS clusters**
+- Prediction of ORF disruption effects for exons in AS clusters
