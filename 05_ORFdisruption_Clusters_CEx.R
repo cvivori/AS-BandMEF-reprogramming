@@ -81,6 +81,24 @@ Plot_ONTO <- function (df_superonto, df_supersuperonto, conditions_to_plot, pale
       } else { ggsave(paste("ONTO_",paste(c(conditions_to_plot[1],conditions_to_plot[length(conditions_to_plot)]),collapse="--"),"_",n,".pdf",sep = ""),width=10,height=6,device = cairo_pdf) }
   }
 }
+FisherTest_ORF <- function(SUPERONTO_table, which_cluster, which_prediction) {
+  
+  SUPERONTO_table$total=rowSums(SUPERONTO_table)
+  totest <- SUPERONTO_table %>%
+    rownames_to_column(var = "cluster") %>%
+    filter(cluster %in% c("all",which_cluster)) %>%
+    dplyr::select(c("cluster",which_prediction,"total")) 
+  totest <- totest %>%
+    mutate(rest = total - totest[,which_prediction]) %>%
+    column_to_rownames(var = "cluster")
+  contingency <- totest %>%
+    rownames_to_column(var = "cluster") %>%
+    dplyr::select(-total) %>%
+    column_to_rownames(var = "cluster")
+  p <- fisher.test(x = contingency, alternative = "two.sided")$p.value
+  return(list(proportions = contingency/totest$total,p_value = p))
+}
+
 
 
 ########## IMPORT ONTO TABLE ##########
@@ -129,15 +147,42 @@ for (x in c(1:i)) {
 }
 head(cl_Data_VTS_ORF[[x]])
 
-# ##### PLOT CASSETTE EXONS
+## PLOT CASSETTE EXONS
 setwd("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/1601 CEBPa_NEW/VASTTOOLS_v2.2_FINAL_Mm10/B2iPS/Clustering/Clustering_CEx_dPSI10/ORF_Disruption/")
 Plot_ONTO(df_superonto = SUPERONTO_EX, df_supersuperonto = SSUPERONTO_EX,
           conditions_to_plot = rownames(SUPERONTO_EX), palette_superonto = viridis(6))
 
-# ##### OUTPUT TABLES CASSETTE EXONS
+## OUTPUT TABLES CASSETTE EXONS
 # write.table(ONTOGENY_EX, file= "NumbersONTO_ONTOGENY.txt", sep="\t", quote =F)
 # write.table(SUPERONTO_EX, file= "NumbersONTO_SUPERONTO.txt", sep="\t", quote =F)
 # for (j in 1:i) {
 #   write.csv(cl_Data_VTS_ORF[[j]], file=paste("cl_",j,"_Data_ORF.csv",sep = ""),row.names = F)
 # }
 
+
+## STATS ON SUPERONTO
+
+SUPERONTO_table <- SUPERONTO_EX
+which_cluster <- "clVTS_4"
+which_prediction <- "CDS_DISR_uEXC"
+
+# PULSE  
+FisherTest_ORF(SUPERONTO_table = SUPERONTO_EX, 
+                which_cluster = "clVTS_4", which_prediction = "CDS_DISR_uEXC")
+# EARLY
+FisherTest_ORF(SUPERONTO_table = SUPERONTO_EX, 
+               which_cluster = "clVTS_10", which_prediction = "CDS_DISR_uEXC")
+FisherTest_ORF(SUPERONTO_table = SUPERONTO_EX, 
+               which_cluster = "clVTS_3", which_prediction = "CDS_DISR_uINC")
+# MIDDLE
+FisherTest_ORF(SUPERONTO_table = SUPERONTO_EX, 
+               which_cluster = "clVTS_9", which_prediction = "CDS_PROT")
+FisherTest_ORF(SUPERONTO_table = SUPERONTO_EX, 
+               which_cluster = "clVTS_1", which_prediction = "CDS_PROT")
+FisherTest_ORF(SUPERONTO_table = SSUPERONTO_EX, 
+               which_cluster = "clVTS_1", which_prediction = "CDS_DISR")
+# LATE
+FisherTest_ORF(SUPERONTO_table = SUPERONTO_EX, 
+               which_cluster = "clVTS_12", which_prediction = "CDS_PROT")
+FisherTest_ORF(SUPERONTO_table = SSUPERONTO_EX, 
+               which_cluster = "clVTS_12", which_prediction = "CDS_DISR")
