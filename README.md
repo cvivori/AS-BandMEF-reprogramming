@@ -14,6 +14,7 @@ Scripts for AS analysis
 - Plot heatmap with correlation of B cell reprogramming stages
 - Plot types of AS events (area plot, barplot and heatmap)
 - Plot heatmaps of scaled PSI values of differential CEx
+- Plot PCA of B cell and MEFs reprogramming on most variable genes/exons
 
 **04. Clustering**
 - Mfuzz (Kumar et al., 2007) clustering of differentially spliced cassette exons
