@@ -7,33 +7,13 @@ require(grid)
 ### MAKE HEATMAP ON AS ON BOTH DATASETS (RAW + SCALED)
 ## TWO WITH HCLUST ON BOTH EVENTS AND SAMPLES
 ## TWO WITH ONLY EVENTS CLUSTERED
+head(BM_PSIs_VTS10_CEx) 
+head(BM_PSIs_VTS10_CEx_scaled) 
+head(BM_PSIs_VTS10_av_CEx) 
+head(BM_PSIs_VTS10_av_CEx_scaled) 
 
-### Merge in a big table
-tmpB <- B_PSIs_VTS_list$dPSI10$CEx
-colnames(tmpB) <- conds_B_iPSES
-tmpM <- M_PSIs_VTS_list$dPSI10$CEx
-colnames(tmpM) <- conds_M_CloneLast
-
-BM_PSIs_VTS10_CEx <- merge(tmpB,tmpM,by="row.names")
-rownames(BM_PSIs_VTS10_CEx) <- BM_PSIs_VTS10_CEx$Row.names
-BM_PSIs_VTS10_CEx <- BM_PSIs_VTS10_CEx %>% dplyr::select(-Row.names)
-mat=t(scale(t((BM_PSIs_VTS10_CEx)))); values = "scaledPSI"
-dim(mat)
-head(mat)
-
-
-### Merge in a big table (Average values)
-tmpB <- B_PSIs_VTS_av_list$dPSI10$CEx
-colnames(tmpB) <- conds_av_B_iPSES
-tmpM <- M_PSIs_VTS_av_list$dPSI10$CEx
-colnames(tmpM) <- conds_av_M_CloneLast
-
-BM_PSIs_VTS10_av_CEx <- merge(tmpB,tmpM,by="row.names")
-rownames(BM_PSIs_VTS10_av_CEx) <- BM_PSIs_VTS10_av_CEx$Row.names
-BM_PSIs_VTS10_av_CEx <- BM_PSIs_VTS10_av_CEx %>% dplyr::select(-Row.names)
-mat=t(scale(t((BM_PSIs_VTS10_av_CEx)))); values = "scaledPSI"
-dim(mat)
-head(mat)
+dim(BM_PSIs_VTS10_CEx); dim(BM_PSIs_VTS10_CEx_scaled) 
+dim(BM_PSIs_VTS10_av_CEx); dim(BM_PSIs_VTS10_av_CEx_scaled) 
 
 
 ## Create dendrograms and sort accordingly

@@ -160,6 +160,34 @@ rm(tmpB); rm(tmpM)
   lapply(M_PSIs_VTS_av_list$dPSI10, dim)
   head(M_PSIs_VTS_av_list$dPSI10$CEx)  
 
+  
+## GENERATE BIG TABLE OF CEx alternatively spliced in both datasets  
+### Single replicates
+tmpB <- B_PSIs_VTS_list$dPSI10$CEx
+  colnames(tmpB) <- conds_B_iPSES
+tmpM <- M_PSIs_VTS_list$dPSI10$CEx
+  colnames(tmpM) <- conds_M_CloneLast
+  
+BM_PSIs_VTS10_CEx <- merge(tmpB,tmpM,by="row.names") %>%
+ column_to_rownames(Row.names)
+BM_PSIs_VTS10_CEx_scaled <- t(scale(t((BM_PSIs_VTS10_CEx)))); values = "scaledPSI"
+  dim(BM_PSIs_VTS10_CEx_scaled)
+  head(BM_PSIs_VTS10_CEx_scaled)
+  
+### Average values
+tmpB <- B_PSIs_VTS_av_list$dPSI10$CEx
+  colnames(tmpB) <- conds_av_B_iPSES
+tmpM <- M_PSIs_VTS_av_list$dPSI10$CEx
+  colnames(tmpM) <- conds_av_M_CloneLast
+  
+BM_PSIs_VTS10_av_CEx <- merge(tmpB,tmpM,by="row.names") %>%
+  column_to_rownames(Row.names)
+BM_PSIs_VTS10_av_CEx_scaled=t(scale(t((BM_PSIs_VTS10_av_CEx)))); values = "scaledPSI"
+  dim(BM_PSIs_VTS10_av_CEx_scaled)
+  head(BM_PSIs_VTS10_av_CEx_scaled)  
+  
+  
+  
 #----- Outputs
 message("Outputs for B and MEFs:\n\tB_Numbers & M_Numbers = number of events in each category,
         B_EV & M_EV = Wrapped in *Events (CEx, IR, Alt3 and Alt5)
@@ -167,6 +195,7 @@ message("Outputs for B and MEFs:\n\tB_Numbers & M_Numbers = number of events in 
         \n\tB_diffEV_list & M_diffEV_list = only events differentially spliced in at least one comparison of each dataset,\tbut all values in both
         B_PSIs_VTS_list & M_PSIs_VTS_list = only PSI columns of diffEV tables in the corresponding dataset
         B_PSIs_VTS_av_list & M_PSIs_VTS_av_list = only average PSI columns of diffEV in the corresponding dataset
+        BM_PSIs_VTS10_CEx = cassette exons in both datasets
         *all are lists with dPSI10/15*")
 #
 
