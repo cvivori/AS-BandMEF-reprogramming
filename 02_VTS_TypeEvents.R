@@ -169,7 +169,7 @@ tmpM <- M_PSIs_VTS_list$dPSI10$CEx
   colnames(tmpM) <- conds_M_CloneLast
   
 BM_PSIs_VTS10_CEx <- merge(tmpB,tmpM,by="row.names") %>%
- column_to_rownames(Row.names)
+ column_to_rownames("Row.names")
 BM_PSIs_VTS10_CEx_scaled <- t(scale(t((BM_PSIs_VTS10_CEx)))); values = "scaledPSI"
   dim(BM_PSIs_VTS10_CEx_scaled)
   head(BM_PSIs_VTS10_CEx_scaled)
@@ -181,7 +181,7 @@ tmpM <- M_PSIs_VTS_av_list$dPSI10$CEx
   colnames(tmpM) <- conds_av_M_CloneLast
   
 BM_PSIs_VTS10_av_CEx <- merge(tmpB,tmpM,by="row.names") %>%
-  column_to_rownames(Row.names)
+  column_to_rownames("Row.names")
 BM_PSIs_VTS10_av_CEx_scaled=t(scale(t((BM_PSIs_VTS10_av_CEx)))); values = "scaledPSI"
   dim(BM_PSIs_VTS10_av_CEx_scaled)
   head(BM_PSIs_VTS10_av_CEx_scaled)  
