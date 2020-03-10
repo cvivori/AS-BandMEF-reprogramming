@@ -33,6 +33,7 @@ B_CPMs_av_tofil$CoeffVar <- (apply (B_CPMs_av_tofil, 1, function(x) sd(x)/mean(x
 head(B_CPMs_av_tofil)
 summary(B_CPMs_av_tofil$CoeffVar)
 
+## 3rd quartile
 v <- subset(B_CPMs_av_tofil,CoeffVar > 0.73864)  %>% 
   dplyr::select(-CoeffVar)
 CorrGEx <- cor(v)
@@ -111,6 +112,7 @@ CEx_dPSI10 <- B_PSIs_VTS_av_list$dPSI10$CEx
 CEx_dPSI10$CoeffVar <- apply (CEx_dPSI10, 1, function(x) sd(x)/mean(x))
 summary(CEx_dPSI10$CoeffVar)
 
+## 3rd quartile
 fil <- subset(CEx_dPSI10,CoeffVar > 0.4107)  %>% 
   dplyr::select(-CoeffVar)
 CorrAS <- cor(fil)
