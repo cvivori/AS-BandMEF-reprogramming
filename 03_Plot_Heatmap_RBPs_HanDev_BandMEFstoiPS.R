@@ -37,19 +37,22 @@ rownames(Han)=names(ENSMUSG_H)
 
 ## ADD RBPs INVOLVED IN DEVELOPMENT / REPROGRAMMING
 setwd("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/R_Scripts/RBPs_lists/")
-ENSMUSG_DEV <- read.csv("RBPs_in_Development_Reprogramming.csv",header=T,row.names = 1)[,1]
-names(ENSMUSG_DEV)=mapIds(org.Mm.eg.db, keys=c(gsub(",.+","",ENSMUSG_DEV)), column='SYMBOL', keytype='ALIAS',multiVals="first")
+RepDev <- read.csv("RBPs_in_Development_Reprogramming.csv",header=T,row.names = 1)
+ENSMUSG_DEV <- as.character(RepDev[,1])
+names(ENSMUSG_DEV)=mapIds(org.Mm.eg.db, keys=ENSMUSG_DEV, column='SYMBOL', keytype='ALIAS',multiVals="first")
+names(ENSMUSG_DEV)[which(is.na(names(ENSMUSG_DEV)))] <- ENSMUSG_DEV[which(is.na(names(ENSMUSG_DEV)))]
 ENSMUSG_DEV
 
 ## UNION
 ENSMUSG=unique(c(names(ENSMUSG_H),ENSMUSG_DEV))
-head(ENSMUSG)
+View(ENSMUSG)
 
 
 
 
 ### MAKE TABLE OF GENES EXPRESSED and VARIABLE ONLY IN BOTH DATASETS
 gBM_CPMs_scaled <- BM_CPMs_scaled
+#gBM_CPMs_av_scaled <- BM_CPMs_av_scaled
 tmp <- mapIds(org.Mm.eg.db, keys=rownames(BM_CPMs_scaled), column='SYMBOL', keytype='ENSEMBL',multiVals="first")
 tmp[which(is.na(tmp))] <- names(tmp[which(is.na(tmp))])
 tmp[which(duplicated(tmp))] <- names(tmp[which(duplicated(tmp))])
@@ -59,7 +62,7 @@ mat <- na.omit(gBM_CPMs_scaled) ; values = "scaledCPM"
 mat <- mat %>%
   rownames_to_column(var="Gene") %>%
   filter(Gene %in% ENSMUSG) %>%
-  column_to_rownames(Gene)
+  column_to_rownames("Gene")
 head(mat)
 dim(mat)
 
@@ -109,7 +112,7 @@ df=data.frame(Gene=rownames(sorted), RANK=rep(0,nrow(sorted)), ESCvsDIFF=rep(0,n
 rownames(df)=df$Gene
 df[intersect(rownames(df),HanFull$NAME),"RANK"]=HanFull[intersect(rownames(df),HanFull$NAME),"RANK"]
 df[intersect(rownames(df),HanFull$NAME),"ESCvsDIFF"]=HanFull[intersect(rownames(df),HanFull$NAME),"ESCvsDIFF"]
-df
+head(df)
 
 
 names_heatmap=rownames(sorted)
@@ -124,15 +127,15 @@ b <- ggplot (df, aes(x=Gene)) +
   scale_y_log10() +
   ylab(label = "Fold Change ES vs. Diff (log10)") +
   coord_flip() +
-  #geom_hline(yintercept = 1, colour = "white",size=0.6) +
-  # geom_text(data = subset(df, ESCvsDIFF <=40 & ESCvsDIFF >0),
-  #           aes(y=ESCvsDIFF+0.7, label=ESCvsDIFF,
-  #               hjust="left",vjust=0.5),
-  #           position = position_dodge(width=1),size=3) +
-  # geom_text(data = subset(df, ESCvsDIFF >40),
-  #           aes(y=ESCvsDIFF, label=ESCvsDIFF,
-  #               hjust="right",vjust=0.5),color="white",
-  #           position = position_dodge(width=1),size=3) +
+  geom_hline(yintercept = 1, colour = "white",size=0.6) +
+  geom_text(data = subset(df, ESCvsDIFF <=40 & ESCvsDIFF >0),
+            aes(y=ESCvsDIFF+0.7, label=ESCvsDIFF,
+                hjust="left",vjust=0.5),
+            position = position_dodge(width=1),size=3) +
+  geom_text(data = subset(df, ESCvsDIFF >40),
+            aes(y=ESCvsDIFF, label=ESCvsDIFF,
+                hjust="right",vjust=0.5),color="white",
+            position = position_dodge(width=1),size=3) +
   theme (text = element_text(color="grey20",size=11),
          axis.title = element_text(face="bold"), #axis.text.y = element_blank(), axis.ticks.y = element_blank(),
          legend.position = "bottom", legend.title = element_text(color="grey20",size=11), legend.direction = "horizontal",
