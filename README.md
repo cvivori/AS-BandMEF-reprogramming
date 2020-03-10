@@ -1,5 +1,4 @@
-# AS
-Scripts for AS analysis
+# AS-reprogramming
 
 **00. Run vast-tools and edgeR**
 - B cell reprogramming dataset: Stadhouders et al., 2018
