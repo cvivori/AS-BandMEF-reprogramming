@@ -6,8 +6,8 @@ require(viridis)
 require(grid)
 require(pheatmap)
 
-######Functions for Heatmaps: clustering and pearson index for distance correlation
-## dist_correlation= c("euclidean_dist","pearson_dist")
+## FUNCTIONS
+## Distance calculation
 ##Euclidean_dist
 dist_fun=dist
 ##Pearson_dist
@@ -15,15 +15,14 @@ dist2 <- function(x, ...)
   as.dist(1-(cor(t(x), method="pearson"))) 
 dist_fun=dist2
 
-## clustering_method=c("complete_method","ward_D2_method"),
+## Clustering method
 ##Complete
 clust_method= hclust
 ##WardD2
 hclust2 <- function(x, method="ward.D2", ...)
   hclust(x, method=method, ...)    
 clust_method= hclust2
-##################
-#
+
 
 
 ## CORRELATION OF STAGES ACCORDING TO GEx
@@ -45,7 +44,7 @@ color.palette=colorRampPalette(c("white", "#2F5F6F"))(length(palette.breaks) - 1
 
 heatmap.2 (x, #numeric matrix of the values to be plotted
            distfun = dist, #"euclidean_dist"
-           hclustfun = hclust, #"ward_D2_method"
+           hclustfun = hclust, #"complete_method"
            reorderfun = function (d,w) reorder (d,w=c(10,0,6,0,6,0,6,0)),
            
            # dendrogram control
@@ -124,7 +123,7 @@ color.palette=colorRampPalette(c("white","#CD5C5C"))(length(palette.breaks) - 1)
 
 heatmap.2 (x, #numeric matrix of the values to be plotted
            distfun = dist, #"euclidean_dist"
-           hclustfun = hclust, #"ward_D2_method"
+           hclustfun = hclust, #"complete_method"
            reorderfun = function (d,w) reorder (d,w=c(0,0,0,0,0,0,0,1)),
            
            # dendrogram control

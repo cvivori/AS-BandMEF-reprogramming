@@ -3,6 +3,24 @@ require(ggplot2)
 require(viridis)
 require(grid)
 
+## FUNCTIONS
+## Distance calculation
+##Euclidean_dist
+dist_fun=dist
+##Pearson_dist
+dist2 <- function(x, ...)
+  as.dist(1-(cor(t(x), method="pearson"))) 
+dist_fun=dist2
+
+## Clustering method
+##Complete
+clust_method= hclust
+##WardD2
+hclust2 <- function(x, method="ward.D2", ...)
+  hclust(x, method=method, ...)    
+clust_method= hclust2
+
+
 
 ### MAKE HEATMAP ON AS ON BOTH DATASETS (RAW + SCALED)
 ## TWO WITH HCLUST ON BOTH EVENTS AND SAMPLES
@@ -15,6 +33,8 @@ head(BM_PSIs_VTS10_av_CEx_scaled)
 dim(BM_PSIs_VTS10_CEx); dim(BM_PSIs_VTS10_CEx_scaled) 
 dim(BM_PSIs_VTS10_av_CEx); dim(BM_PSIs_VTS10_av_CEx_scaled) 
 
+
+mat <- BM_PSIs_VTS10_av_CEx_scaled
 
 ## Create dendrograms and sort accordingly
 col_clust=hclust( dist(t(mat), method = "euclidean"), method = "ward.D2" )
