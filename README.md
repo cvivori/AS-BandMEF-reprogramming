@@ -1,7 +1,8 @@
-# AS
-Scripts for AS analysis
+# AS-reprogramming
 
 **00. Run vast-tools and edgeR**
+- B cell reprogramming dataset: Stadhouders et al., 2018
+- MEFs reprogramming dataset: Cieply et al., 2016
 
 **01. Import vast-tools and edgeR outputs in R**
 
@@ -15,6 +16,7 @@ Scripts for AS analysis
 - Plot types of AS events (area plot, barplot and heatmap)
 - Plot heatmaps of scaled PSI values of differential CEx
 - Plot PCA of B cell and MEFs reprogramming on most variable genes/exons
+- Plot heatmap of scaled expression of RNA-binding proteins involved in pluripotency (from Han et al., 2013), reprogramming or development.
 
 **04. Clustering**
 - Mfuzz (Kumar et al., 2007) clustering of differentially spliced cassette exons
