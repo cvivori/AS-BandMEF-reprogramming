@@ -34,7 +34,6 @@ ENS2Gene <- na.omit(rbind(ENS2Gene_B,ENS2Gene_M) %>%  distinct())
 ENS2Gene$Gene <- mapIds(org.Mm.eg.db, keys=as.character(ENS2Gene$GeneName), column='SYMBOL', keytype='ALIAS',multiVals="first")
 
 
-
 ## CALCULATE AVERAGE CPMs and ORDER CONDITIONS
 B_CPMs <- B_EdgeR %>% 
   dplyr::select(conds_B_iPSES)
