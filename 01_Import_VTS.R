@@ -34,43 +34,57 @@ PSIcols_B <- PSIcols[grep("^B_",PSIcols)]
 ## CALCULATE MAX_dPSI
   #dPSI10
 B_INCL_dPSI10$Max_dPSI <- apply(B_INCL_dPSI10[,dPSIcols_B], 1, function(x) max(x,na.rm = T))
+B_INCL_dPSI10$Min_dPSI <- apply(B_INCL_dPSI10[,dPSIcols_B], 1, function(x) min(x,na.rm = T))
+B_INCL_dPSI10$absMax_dPSI <- apply(B_INCL_dPSI10[,c("Max_dPSI","Min_dPSI")], 1, function(x) max(abs(x),na.rm = T))
 B_INCL_dPSI10 <- B_INCL_dPSI10 %>%
-  mutate(Max_dPSI = replace(Max_dPSI, Max_dPSI == -Inf, NA))
+  mutate(Max_dPSI = replace(Max_dPSI, Max_dPSI == -Inf, NA)) %>%
+  mutate(absMax_dPSI = replace(absMax_dPSI, absMax_dPSI == -Inf, NA)) %>%
+  mutate(Min_dPSI = replace(Min_dPSI, Min_dPSI == Inf, NA)) %>%
+  mutate(absMax_dPSI = replace(absMax_dPSI, absMax_dPSI == Inf, NA))
 dim(B_INCL_dPSI10)
 head(B_INCL_dPSI10)
+head(subset(B_INCL_dPSI10, Max_dPSI != Min_dPSI))
 summary(B_INCL_dPSI10)
+B_INCL_dPSI10[grep("MmuEX0026275",B_INCL_dPSI10$EVENT),]
 # tibble(B_INCL_dPSI10)
 summary(B_INCL_dPSI10$Max_dPSI)
+summary(B_INCL_dPSI10$Min_dPSI)
+summary(B_INCL_dPSI10$absMax_dPSI)
   #dPSI15
 B_INCL_dPSI15$Max_dPSI <- apply(B_INCL_dPSI15[,dPSIcols_B], 1, function(x) max(x,na.rm = T))
+B_INCL_dPSI15$Min_dPSI <- apply(B_INCL_dPSI15[,dPSIcols_B], 1, function(x) min(x,na.rm = T))
+B_INCL_dPSI15$absMax_dPSI <- apply(B_INCL_dPSI15[,c("Max_dPSI","Min_dPSI")], 1, function(x) max(abs(x),na.rm = T))
 B_INCL_dPSI15 <- B_INCL_dPSI15 %>%
-  mutate(Max_dPSI = replace(Max_dPSI, Max_dPSI == -Inf, NA))
+  mutate(Max_dPSI = replace(Max_dPSI, Max_dPSI == -Inf, NA)) %>%
+  mutate(absMax_dPSI = replace(absMax_dPSI, absMax_dPSI == -Inf, NA)) %>%
+  mutate(Min_dPSI = replace(Min_dPSI, Min_dPSI == Inf, NA)) %>%
+  mutate(absMax_dPSI = replace(absMax_dPSI, absMax_dPSI == Inf, NA))
 dim(B_INCL_dPSI15)
 head(B_INCL_dPSI15)
 summary(B_INCL_dPSI15)
 # tibble(B_INCL_dPSI15)
-summary(B_INCL_dPSI15$Max_dPSI)
+summary(B_INCL_dPSI15$absMax_dPSI)
 
   #dPSI10
 ## NUMBER OF MAPPED EVENTS
 nrow(B_INCL_dPSI10)
 ## NUMBER OF NON-CHANGING EVENTS
-sum(is.na(B_INCL_dPSI10$Max_dPSI))
+sum(is.na(B_INCL_dPSI10$absMax_dPSI))
 ## NUMBER OF EVENTS DIFFERENTIALLY SPLICED AT LEAST IN ONE COMPARISON
-nrow(B_INCL_dPSI10)-sum(is.na(B_INCL_dPSI10$Max_dPSI))
+nrow(B_INCL_dPSI10)-sum(is.na(B_INCL_dPSI10$absMax_dPSI))
   #dPSI15
 ## NUMBER OF MAPPED EVENTS
 nrow(B_INCL_dPSI15)
 ## NUMBER OF NON-CHANGING EVENTS
-sum(is.na(B_INCL_dPSI15$Max_dPSI))
+sum(is.na(B_INCL_dPSI15$absMax_dPSI))
 ## NUMBER OF EVENTS DIFFERENTIALLY SPLICED AT LEAST IN ONE COMPARISON
-nrow(B_INCL_dPSI15)-sum(is.na(B_INCL_dPSI15$Max_dPSI))
+nrow(B_INCL_dPSI15)-sum(is.na(B_INCL_dPSI15$absMax_dPSI))
 
 
 ## CREATE LISTS with dPSI10 and 15
 ## EXTRACT ONLY DIFFERENTIAL EVENTS
-B_diffEV <- list(dPSI10 = B_INCL_dPSI10[!is.na(B_INCL_dPSI10$Max_dPSI),], 
-                 dPSI15 = B_INCL_dPSI15[!is.na(B_INCL_dPSI15$Max_dPSI),])
+B_diffEV <- list(dPSI10 = B_INCL_dPSI10[!is.na(B_INCL_dPSI10$absMax_dPSI),], 
+                 dPSI15 = B_INCL_dPSI15[!is.na(B_INCL_dPSI15$absMax_dPSI),])
 B_diffEV <- lapply(B_diffEV, function(x) {rownames(x) = x$EVENT; x})
 lapply(B_diffEV, function(x) dim(x))
 
@@ -135,14 +149,25 @@ PSIcols_M <- PSIcols[grep("^M_",PSIcols)]
 ## CALCULATE MAX_dPSI
 #dPSI10
 M_INCL_dPSI10$Max_dPSI <- apply(M_INCL_dPSI10[,dPSIcols_M], 1, function(x) max(x,na.rm = T))
+M_INCL_dPSI10$Min_dPSI <- apply(M_INCL_dPSI10[,dPSIcols_M], 1, function(x) min(x,na.rm = T))
+M_INCL_dPSI10$absMax_dPSI <- apply(M_INCL_dPSI10[,c("Max_dPSI","Min_dPSI")], 1, function(x) max(abs(x),na.rm = T))
 M_INCL_dPSI10 <- M_INCL_dPSI10 %>%
-  mutate(Max_dPSI = replace(Max_dPSI, Max_dPSI == -Inf, NA))
+  mutate(Max_dPSI = replace(Max_dPSI, Max_dPSI == -Inf, NA)) %>%
+  mutate(absMax_dPSI = replace(absMax_dPSI, absMax_dPSI == -Inf, NA)) %>%
+  mutate(Min_dPSI = replace(Min_dPSI, Min_dPSI == Inf, NA)) %>%
+  mutate(absMax_dPSI = replace(absMax_dPSI, absMax_dPSI == Inf, NA))
 dim(M_INCL_dPSI10)
 head(M_INCL_dPSI10)
 summary(M_INCL_dPSI10)
 #dPSI15
 M_INCL_dPSI15$Max_dPSI <- apply(M_INCL_dPSI15[,dPSIcols_M], 1, function(x) max(x,na.rm = T))
+M_INCL_dPSI15$Min_dPSI <- apply(M_INCL_dPSI15[,dPSIcols_M], 1, function(x) min(x,na.rm = T))
+M_INCL_dPSI15$absMax_dPSI <- apply(M_INCL_dPSI15[,c("Max_dPSI","Min_dPSI")], 1, function(x) max(abs(x),na.rm = T))
 M_INCL_dPSI15 <- M_INCL_dPSI15 %>%
+  mutate(Max_dPSI = replace(Max_dPSI, Max_dPSI == -Inf, NA)) %>%
+  mutate(absMax_dPSI = replace(absMax_dPSI, absMax_dPSI == -Inf, NA)) %>%
+  mutate(Min_dPSI = replace(Min_dPSI, Min_dPSI == Inf, NA)) %>%
+  mutate(absMax_dPSI = replace(absMax_dPSI, absMax_dPSI == Inf, NA))
   mutate(Max_dPSI = replace(Max_dPSI, Max_dPSI == -Inf, NA))
 dim(M_INCL_dPSI15)
 head(M_INCL_dPSI15)
@@ -152,22 +177,22 @@ summary(M_INCL_dPSI15)
 ## NUMBER OF MAPPED EVENTS
 nrow(M_INCL_dPSI10)
 ## NUMBER OF NON-CHANGING EVENTS
-sum(is.na(M_INCL_dPSI10$Max_dPSI))
+sum(is.na(M_INCL_dPSI10$absMax_dPSI))
 ## NUMBER OF EVENTS DIFFERENTIALLY SPLICED AT LEAST IN ONE COMPARISON
-nrow(M_INCL_dPSI10)-sum(is.na(M_INCL_dPSI10$Max_dPSI))
+nrow(M_INCL_dPSI10)-sum(is.na(M_INCL_dPSI10$absMax_dPSI))
 #dPSI15
 ## NUMBER OF MAPPED EVENTS
 nrow(M_INCL_dPSI15)
 ## NUMBER OF NON-CHANGING EVENTS
-sum(is.na(M_INCL_dPSI15$Max_dPSI))
+sum(is.na(M_INCL_dPSI15$absMax_dPSI))
 ## NUMBER OF EVENTS DIFFERENTIALLY SPLICED AT LEAST IN ONE COMPARISON
-nrow(M_INCL_dPSI15)-sum(is.na(M_INCL_dPSI15$Max_dPSI))
+nrow(M_INCL_dPSI15)-sum(is.na(M_INCL_dPSI15$absMax_dPSI))
 
 
 ## CREATE LISTS with dPSI10 and 15
 ## EXTRACT ONLY DIFFERENTIAL EVENTS
-M_diffEV <- list(dPSI10 = M_INCL_dPSI10[!is.na(M_INCL_dPSI10$Max_dPSI),], 
-                 dPSI15 = M_INCL_dPSI15[!is.na(M_INCL_dPSI15$Max_dPSI),])
+M_diffEV <- list(dPSI10 = M_INCL_dPSI10[!is.na(M_INCL_dPSI10$absMax_dPSI),], 
+                 dPSI15 = M_INCL_dPSI15[!is.na(M_INCL_dPSI15$absMax_dPSI),])
 M_diffEV <- lapply(M_diffEV, function(x) {rownames(x) = x$EVENT; x})
 lapply(M_diffEV, function(x) dim(x))
 
