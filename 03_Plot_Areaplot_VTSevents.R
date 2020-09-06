@@ -63,6 +63,45 @@ Plot_StackedBarPlot <- function(table_numberevents,condition_compared,events=c("
   } else { p }
 }
 
+Plot_StackedBarPlot_updown <- function(table_numberevents,condition_compared,events=c("all","wrap"),suffix,pdf_output=c("yes","no")) {
+  data <- table_numberevents
+  
+  p <- ggplot(data, aes(x=Condition2_numbers, fill=Event_type)) +
+    scale_x_continuous(breaks=data$Condition2_numbers,labels=data$Condition2,
+                       name=paste("Condition (compared to ",condition_compared,")",sep="")) +
+    scale_y_continuous(breaks=seq(-10000,10000,1000),name="Number of events (cumulative)") +
+    geom_bar(data = subset(data, L1 == "dPSI10_UP"), 
+             aes(y=Number), width = 0.8,
+             position=position_stack(reverse=F), 
+             stat="identity") +
+    geom_bar(data = subset(data, L1 == "dPSI10_DOWN"), 
+             aes(y=-Number), width = 0.8,
+             position=position_stack(reverse=F), 
+             stat="identity") + 
+    # geom_text(data = subset(data, L1 == "dPSI10_UP"), 
+    #           aes(x=Condition2_numbers,y=Number, label=Number, 
+    #               hjust=-0.2,vjust=0.5),
+    #           position = position_dodge(width=1), size=3) +
+    # geom_text(data = subset(data, L1 == "dPSI10_DOWN"), 
+    #           aes(x=Condition2_numbers,y=-Number, label=Number, 
+    #               hjust=1.2,vjust=0.5),
+    #           position = position_dodge(width=1),size=3) +
+    theme_minimal() +
+    theme (text = element_text(color="grey20",size=11),
+           axis.title = element_text(face="bold"),
+           axis.text.x = element_text(angle=45,hjust=1,vjust=1),
+           legend.position = "bottom", legend.title = element_text(face="bold"),
+           panel.grid.major.x = element_blank(), panel.grid.minor.x=element_blank(),
+           panel.grid.major.y=element_line(linetype = "dashed",color="gray80")) +
+    if (events=="wrap") { scale_fill_viridis(option="D",discrete = T,direction = 1,begin=0,end=1, name = "Event type")
+    }  else if (events=="all")  {
+      scale_fill_manual(values = c(magma(2,begin =.55,end =.7),"gray70",  #plasma(1,begin=0.95),
+                                   viridis(6,begin=0,end=0.8)), name = "Event type") }
+  if (pdf_output == "yes") { p
+    ggsave(paste("StackedBarPlot_",events,"_",suffix,".pdf",sep = ""), width=7,height=6,device = cairo_pdf)
+  } else { p }
+}
+
 Plot_Heatmap_NumberEvents <- function(table_numberevents,suffix){
   for (e in unique(table_numberevents$Event_type)) {
     data <- table_numberevents %>%
@@ -127,4 +166,18 @@ data_B_dPSI10_wrap <- melt(B_diffEV_comparisons_EV$dPSI10, variable.name = "Even
 Plot_Heatmap_NumberEvents(table_numberevents = data_B_dPSI10_wrap,suffix = "dPSI10")
 
 
+
+
+## NUMBER OF EVENTS dPSI10 ALL with Directionality
+data_Bcells_dPSI10_all_directions <- melt(B_diffEV_comparisons_Bcells_Numbers, variable.name = "Event_type", value.name = "Number", level=1) %>% 
+  filter(Condition1 == "B_Bcells") 
+data_Bcells_dPSI10_all_directions$Condition2_numbers <- str_replace_all(data_Bcells_dPSI10_all_directions$Condition2, "B_Day","")
+data_Bcells_dPSI10_all_directions$Condition2_numbers <- str_replace_all(data_Bcells_dPSI10_all_directions$Condition2_numbers, "B_Bpulse","0")
+data_Bcells_dPSI10_all_directions$Condition2_numbers <- str_replace_all(data_Bcells_dPSI10_all_directions$Condition2_numbers, "B_iPS","10")
+data_Bcells_dPSI10_all_directions$Condition2_numbers <- as.numeric(str_replace_all(data_Bcells_dPSI10_all_directions$Condition2_numbers, "B_ES","12"))
+data_Bcells_dPSI10_all_directions$Event_type <- factor(data_Bcells_dPSI10_all_directions$Event_type, levels= c("Alt3","Alt5","IR","S","C1","C2","C3","MIC","ANN"))
+(data_Bcells_dPSI10_all_directions)
+## STACKED AREA & BAR CHARTs
+Plot_AreaPlot(table_numberevents = data_Bcells_dPSI10_all, condition_compared = "Bcells",events = "all",suffix = "dPSI10", pdf_output = "yes")
+Plot_StackedBarPlot_updown(table_numberevents = data_Bcells_dPSI10_all_directions, condition_compared = "Bcells",events = "all",suffix = "dPSI10", pdf_output = "yes")
 
