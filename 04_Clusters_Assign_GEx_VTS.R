@@ -40,7 +40,7 @@ cl_GEx_CEx <- lapply(cl_ENSGIDs_VTS_CEx, function(x) B_CPMs_av[intersect(x,rowna
 cl_GEx_CEx_Z= lapply(cl_GEx_CEx, function(x) t(scale(t(x))))
 
 
-## ATTRIBUTE MEMBERSHIP TO SCALED GEx of RBPs (to CEx clusters dPSI10)
+## ATTRIBUTE MEMBERSHIP TO SCALED GEx of GENES (to CEx clusters dPSI10)
 setwd("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/1601 CEBPa_NEW/VASTTOOLS_v2.2_FINAL_Mm10/B2iPS/Clustering/Clustering_CEx_dPSI10/Overlap_GEx_CEx/")
 # Assess membership of ZScores of CLUSTER Gene Expression to each cluster (CONCORDANT & DISCORDANT gene exp)
 Cl_GE_memberships_conc=ClustersMembers(cl_GEx_CEx_Z, clusters_number = i_list$CEx, clusters_centroids = cl2$centers)
