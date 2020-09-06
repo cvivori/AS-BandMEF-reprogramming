@@ -4,7 +4,7 @@ require(org.Mm.eg.db)
 #MOUSE vectors with ALL possible RBP/SPL GENE NAMES  from Uniprot database
 setwd("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/R_Scripts/RBPs_lists/")
 RBPs=read.table("RBPgenes_mouse_vector.txt",sep=",",header = TRUE,row.names = 1) 
-mRBP=mapIds(org.Mm.eg.db, keys=as.vector(RBPs[,1]), column='SYMBOL', keytype='ALIAS',multiVals="first")		# RBP is a vector containing RBP Gene Names for 
+mRBP=mapIds(org.Mm.eg.db, keys=as.vector(RBPs[,1]), column='SYMBOL', keytype='ALIAS',multiVals="first")		# RBP is a vector containing RBP Gene Names 
 SPLs=read.table("SPLgenes_mouse_ext.txt",sep=",",header = TRUE,row.names = 1)
 SPLs <- c(as.vector(SPLs$x), "Rbm47","Cpsf2","Cpsf3","Tia1","Zrsr1","Zrsr2","U2surp")
 mSPL=mapIds(org.Mm.eg.db, keys=as.vector(SPLs), column='SYMBOL', keytype='ALIAS',multiVals="first")		# SPL is a vector containing Splicing Factors Gene Names
