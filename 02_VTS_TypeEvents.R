@@ -94,8 +94,8 @@ tmpB <-list( dPSI10 = data.frame( do.call(rbind,lapply(B_diffEV_comparisons$dPSI
   tmpB <- lapply(tmpB, function(x) rownames_to_column(x))
 B_diffEV_comparisons_Numbers <- lapply(tmpB, function(t) merge(B_couples,t, by.x="Comparison", by.y="rowname",all=T))
 
-tmpB <-list( dPSI10 = data.frame( do.call(rbind,lapply(B_diffEV_comparisons$dPSI10, function(x) Wrap_inclMIC(table(x[,"COMPLEX"])))) ),
-             dPSI15 = data.frame( do.call(rbind,lapply(B_diffEV_comparisons$dPSI15, function(x) Wrap_inclMIC(table(x[,"COMPLEX"])))) ))
+tmpB <-list( dPSI10 = data.frame( do.call(rbind,lapply(B_diffEV_comparisons$dPSI10, function(x) Wrap_VTS_Events(x,"in_CEx"))) ),
+             dPSI15 = data.frame( do.call(rbind,lapply(B_diffEV_comparisons$dPSI15, function(x) Wrap_VTS_Events(x,"in_CEx"))) ))
   tmpB <- lapply(tmpB, function(x) rownames_to_column(x))
 B_diffEV_comparisons_EV <- lapply(tmpB, function(t) merge(B_couples,t, by.x="Comparison", by.y="rowname",all=T))
       B_diffEV_comparisons_EV           
@@ -105,8 +105,8 @@ tmpM <-list( dPSI10 = data.frame( do.call(rbind,lapply(M_diffEV_comparisons$dPSI
     tmpM <- lapply(tmpM, function(x) rownames_to_column(x))
 M_diffEV_comparisons_Numbers <- lapply(tmpM, function(t) merge(M_couples,t, by.x="Comparison", by.y="rowname",all=T))
 
-tmpM <-list( dPSI10 = data.frame( do.call(rbind,lapply(M_diffEV_comparisons$dPSI10, function(x) Wrap_inclMIC(table(x[,"COMPLEX"])))) ),
-             dPSI15 = data.frame( do.call(rbind,lapply(M_diffEV_comparisons$dPSI15, function(x) Wrap_inclMIC(table(x[,"COMPLEX"])))) ))
+tmpM <-list( dPSI10 = data.frame( do.call(rbind,lapply(M_diffEV_comparisons$dPSI10, function(x) Wrap_VTS_Events(x,"in_CEx"))) ),
+             dPSI15 = data.frame( do.call(rbind,lapply(M_diffEV_comparisons$dPSI15, function(x) Wrap_VTS_Events(x,"in_CEx"))) ))
     tmpM <- lapply(tmpM, function(x) rownames_to_column(x))
 M_diffEV_comparisons_EV <- lapply(tmpM, function(t) merge(M_couples,t, by.x="Comparison", by.y="rowname",all=T))
   M_diffEV_comparisons_EV           
@@ -125,8 +125,7 @@ rm(tmpB); rm(tmpM)
 #   write.table(M_diffEV_comparisons_Numbers[[d]],file = "NumberEvents_EachComparis_MEFstoiPS.txt",sep="\t",quote=F,row.names = F)
 # }  
   
-  
-  
+
   ## EXTRACT PSIs of EACH SET OF EXONS in B/M_PSIs_VTS - including GENEname
   B_PSIs_VTS_list = M_PSIs_VTS_list = list()
   for (d in names(B_PSIs_VTS)) { 
@@ -185,6 +184,32 @@ BM_PSIs_VTS10_av_CEx <- merge(tmpB,tmpM,by="row.names") %>%
 BM_PSIs_VTS10_av_CEx_scaled=t(scale(t((BM_PSIs_VTS10_av_CEx)))); values = "scaledPSI"
   dim(BM_PSIs_VTS10_av_CEx_scaled)
   head(BM_PSIs_VTS10_av_CEx_scaled)  
+  
+  
+  
+## CREATE TABLE WITH EVENTS FROM single COMPARISONS with B cells (separating directions)
+dPSIcols_B_Bcells <- dPSIcols_B[grep("dPSI-B_Bcells.vs.",dPSIcols_B)]
+B_diffEV_comparisons_Bcells <- list()
+  for (c in dPSIcols_B_Bcells) { B_diffEV_comparisons_Bcells$dPSI10_UP[[c]] <- B_diffEV$dPSI10[which(B_diffEV$dPSI10[,c] >=10),]}
+  for (c in dPSIcols_B_Bcells) { B_diffEV_comparisons_Bcells$dPSI10_DOWN[[c]] <- B_diffEV$dPSI10[which(B_diffEV$dPSI10[,c] <=-10),]}
+# Check sum corresponds to total
+unlist(lapply(B_diffEV_comparisons$dPSI10, function(x) nrow(x)))[1:7] == unlist(lapply(B_diffEV_comparisons_Bcells$dPSI10_UP, function(x) nrow(x))) + unlist(lapply(B_diffEV_comparisons_Bcells$dPSI10_DOWN, function(x) nrow(x)))
+  
+  ## CALCULATE NUMBER OF EVENTS in each COMPARISON
+  tmpB <-list( dPSI10_UP = data.frame( do.call(rbind,lapply(B_diffEV_comparisons_Bcells$dPSI10_UP, function(x) table(x[,"COMPLEX"]))) ),
+               dPSI10_DOWN = data.frame( do.call(rbind,lapply(B_diffEV_comparisons_Bcells$dPSI10_DOWN, function(x) table(x[,"COMPLEX"]))) ))
+  tmpB <- lapply(tmpB, function(x) rownames_to_column(x))
+  B_diffEV_comparisons_Bcells_Numbers <- lapply(tmpB, function(t) merge(B_couples,t, by.x="Comparison", by.y="rowname",all.y=T))
+  B_diffEV_comparisons_Bcells_Numbers
+  
+  tmpB <-list( dPSI10_UP = data.frame( do.call(rbind,lapply(B_diffEV_comparisons_Bcells$dPSI10_UP, function(x) Wrap_VTS_Events(x,"in_CEx"))) ),
+               dPSI10_DOWN = data.frame( do.call(rbind,lapply(B_diffEV_comparisons_Bcells$dPSI10_DOWN, function(x) Wrap_VTS_Events(x,"in_CEx"))) ))
+  tmpB <- lapply(tmpB, function(x) rownames_to_column(x))
+  B_diffEV_comparisons_Bcells_EV <- lapply(tmpB, function(t) merge(B_couples,t, by.x="Comparison", by.y="rowname",all.y=T))
+  B_diffEV_comparisons_Bcells_EV           
+ 
+  
+  
   
   
   
