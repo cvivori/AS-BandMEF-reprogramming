@@ -3,6 +3,7 @@
 **00. Run vast-tools and edgeR**
 - B cell reprogramming dataset: Stadhouders et al., 2018
 - MEFs reprogramming dataset: Cieply et al., 2016
+- Generate list of RNA-binding proteins (RBPs) and splicing-associated RBPs (extended) from Uniprot
 
 **01. Import vast-tools and edgeR outputs in R**
 
