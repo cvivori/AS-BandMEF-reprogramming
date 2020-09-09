@@ -84,11 +84,11 @@ if (values== "rawPSI") {plt <- p + scale_fill_viridis(option = "D",
 plt
 
 
-drows <- ggplot(segment(row_ddata)) + geom_segment(aes(x=x, y=y, xend=xend, yend=yend)
-) + coord_flip(
-) +scale_y_reverse(
-) + theme_minimal(
-) + theme(axis.line=element_blank(),axis.text.x=element_blank(),
+drows <- ggplot(segment(row_ddata)) + geom_segment(aes(x=x, y=y, xend=xend, yend=yend)) + 
+  coord_flip() +
+  scale_y_reverse() + 
+  theme_minimal() + 
+  theme(axis.line=element_blank(),axis.text.x=element_blank(),
           axis.text.y=element_blank(),axis.ticks=element_blank(),
           axis.title.x=element_blank(), axis.title.y=element_blank(),legend.position="none",
           panel.background=element_blank(),panel.border=element_blank(),panel.grid.major=element_blank(),
@@ -96,8 +96,8 @@ drows <- ggplot(segment(row_ddata)) + geom_segment(aes(x=x, y=y, xend=xend, yend
 
 setwd("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/1601 CEBPa_NEW/VASTTOOLS_v2.2_FINAL_Mm10/")
 pdf(file=paste("Heatmap_",values,"_CEx_dPSI10_BandMEFstoiPS_nocoldendro.pdf",sep = ""),width = 16, height=12.5)
-grid.newpage()
-print(drows, vp=viewport(0.2, 0.925, x=0.16, y=0.448))
-print(plt, vp=viewport(0.6, 0.88, x=0.55, y=0.43))
+    grid.newpage()
+    print(drows, vp=viewport(0.2, 0.925, x=0.16, y=0.448))
+    print(plt, vp=viewport(0.6, 0.88, x=0.55, y=0.43))
 dev.off() 
 
