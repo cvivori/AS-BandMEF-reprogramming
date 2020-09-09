@@ -87,22 +87,21 @@ head(MBtoiPS_m)
 p <- ggplot(MBtoiPS_m, aes(Conditions, Gene,fill = value)) + geom_tile()
 
 plt <- p + scale_fill_gradient2(low = "#3E9941",mid="white",high = "#8C1A6A", midpoint = 0,limits=c(-4,4),
-                                guide=guide_colorbar(title = "Scaled\nFPKM",raster = F,nbin=40)
-)  + theme_minimal(
-)  + theme(axis.text.x = element_text(size = 10,angle = 90,hjust=1,vjust=0.5),
-           axis.text.y = element_text(size = 6,angle = 0,hjust=1,vjust=0.5),
-           axis.title= element_blank(),axis.ticks=element_blank(),
-           legend.title = element_text(size = 7)
-) + geom_vline(xintercept = 16.5, col="white",size=2
-)
+                                guide=guide_colorbar(title = "Scaled\nFPKM",raster = F,nbin=40))  + 
+            theme_minimal() + 
+            theme(axis.text.x = element_text(size = 10,angle = 90,hjust=1,vjust=0.5),
+                  axis.text.y = element_text(size = 6,angle = 0,hjust=1,vjust=0.5),
+                  axis.title= element_blank(),axis.ticks=element_blank(),
+                  legend.title = element_text(size = 7)) + 
+            geom_vline(xintercept = 16.5, col="white",size=2)
 plt
 
 
-d <- ggplot(segment(ddata)) + geom_segment(aes(x=x, y=y, xend=xend, yend=yend)
-) + coord_flip(
-) +scale_y_reverse(
-) + theme_minimal(
-) + theme(axis.line=element_blank(),axis.text.x=element_blank(),
+d <- ggplot(segment(ddata)) + geom_segment(aes(x=x, y=y, xend=xend, yend=yend)) + 
+  coord_flip() +
+  scale_y_reverse() + 
+  theme_minimal() + 
+  theme(axis.line=element_blank(),axis.text.x=element_blank(),
           axis.text.y=element_blank(),axis.ticks=element_blank(),
           axis.title.x=element_blank(), axis.title.y=element_blank(),legend.position="none",
           panel.background=element_blank(),panel.border=element_blank(),panel.grid.major=element_blank(),
