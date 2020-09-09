@@ -278,6 +278,12 @@ cl_memb_VTS = cl_events_VTS = cl_genes_VTS = list()
         # for (j in 1:i) {
         #   write.table(cl_Data_VTS[[j]], file=paste("cl_",j,"_Data_","minmem",minmemlist,".txt",sep = ""),row.names = F,quote = F,sep="\t")
         # }
+       
+## PREPARE SUPP.TABLE1 
+        cl_Data_VTS_SUPP1 <- sapply(c(1:i), function(x) {y = subset(B_diffEV$dPSI10, EVENT %in% cl_event[[x]]),
+                                                  y$Cluster = x},
+                                                  return(y))
+  
 
 
 cl2_VTS <- cl2
