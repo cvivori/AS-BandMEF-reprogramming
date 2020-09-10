@@ -261,14 +261,14 @@ cl_memb_VTS = cl_events_VTS = cl_genes_VTS = list()
         # SORT Events in clusters by membership
         acore_sort_VTS <- as.list(sapply (c(1:i), function(x) acore_sort_VTS[[x]]=as.matrix(acore_list_VTS[[x]][(order(factor(acore_list_VTS[[x]][,2]), decreasing = TRUE)),])))   # acore_sort is a list containing SKIPPING coordinates and membership values (sorted by membership)
         # for(j in 1:length(acore_list_VTS)) {
-        #     table <-as.data.frame(cbind(as.character(acore_sort_VTS[[j]][,1]),as.numeric(acore_sort_VTS[[j]][,2])))
+        #     table <- as.data.frame(cbind(as.character(acore_sort_VTS[[j]][,1]),as.numeric(acore_sort_VTS[[j]][,2])))
         #     write.table(table, paste("resolve_to_",i,"clusters.c",j,"_sorted.txt",sep=""), row.names=FALSE, col.names=FALSE, quote=FALSE,sep="\t")
         # }
 
 
         # SELECT EVENTS/GENES OF EACH CLUSTER by min membership
         minmemlist=0 # Set minimum membership threshold
-        cl_memb_VTS <- noquote(sapply (c(1:i), function(x) cl_memb_VTS[[x]]=acore_sort_VTS[[x]][which(acore_sort_VTS[[x]][,2]>minmemlist),]))    
+        cl_memb_VTS <- sapply (c(1:i), function(x) cl_memb_VTS[[x]]=acore_sort_VTS[[x]][which(acore_sort_VTS[[x]][,2]>minmemlist),])    
         cl_events_VTS <- noquote(sapply (c(1:i), function(x) cl_events_VTS[[x]]=as.vector(acore_sort_VTS[[x]][which(acore_sort_VTS[[x]][,2]>minmemlist),1])))    # cl_events is a list containing the SKIPPING coordinates of the events belonging to each cluster (>minmem) 
         cl_genes_VTS <- lapply (cl_events_VTS, function(x) subset(B_diffEV$dPSI10, EVENT %in% x)[,"GENE"])                       # cl_genes is a list containing the gene names of the events belonging to each cluster (>minmem) 
         
@@ -278,15 +278,21 @@ cl_memb_VTS = cl_events_VTS = cl_genes_VTS = list()
         # for (j in 1:i) {
         #   write.table(cl_Data_VTS[[j]], file=paste("cl_",j,"_Data_","minmem",minmemlist,".txt",sep = ""),row.names = F,quote = F,sep="\t")
         # }
+cl2_VTS <- cl2
        
 ## PREPARE SUPP.TABLE1 
-        cl_Data_VTS_SUPP1 <- sapply(c(1:i), function(x) {y = subset(B_diffEV$dPSI10, EVENT %in% cl_event[[x]]),
-                                                  y$Cluster = x},
-                                                  return(y))
-  
+        # NB. Clusters have been renamed arbitrarily to follow the order of the manuscript 
+        cluster_correspondence <- c("Cluster_05","Cluster_10","Cluster_03","Cluster_01","Cluster_08","Cluster_12","Cluster_07","Cluster_09","Cluster_04","Cluster_02","Cluster_11","Cluster_06")
+        
+        cl_Data_VTS_SUPP1 = tmp = list()
+        for (t in c(1:i)) {
+          tmp[[t]] = subset(B_diffEV$dPSI10, EVENT %in% cl_events_VTS[[t]])
+          tmp[[t]]$Cluster = rep(cluster_correspondence[t], length(cl_events_VTS[[t]]))
+          cl_Data_VTS_SUPP1[[t]] = merge(tmp[[t]],cl_memb_VTS[[t]][cl_events_VTS[[t]],], by.x="EVENT", by.y="NAME")
+        }
+        head(cl_Data_VTS_SUPP1[[1]])
 
 
-cl2_VTS <- cl2
 
 #----- Outputs
 message("

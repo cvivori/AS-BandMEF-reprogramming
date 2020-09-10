@@ -143,14 +143,14 @@ SSUPERONTO_EX=as.data.frame(rbind(do.call(rbind,SETS_EX_SSO),table(all_EX_ONTO[,
     
 cl_Data_VTS_ORF=list()
 for (x in c(1:i)) {
-  cl_Data_VTS_ORF[[x]] = merge.data.frame(cl_Data_VTS[[x]],SETS_EX_ONTO[[x]],by = c("GENE","EVENT","COORD","LENGTH","FullCO","COMPLEX"))
+  cl_Data_VTS_ORF[[x]] = merge.data.frame(cl_Data_VTS_SUPP1[[x]],SETS_EX_ONTO[[x]],by = c("GENE","EVENT","COORD","LENGTH","FullCO","COMPLEX"), all.x = T)
 }
-head(cl_Data_VTS_ORF[[x]])
+head(cl_Data_VTS_ORF[[1]])
 
 ## PLOT CASSETTE EXONS
 setwd("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/1601 CEBPa_NEW/VASTTOOLS_v2.2_FINAL_Mm10/B2iPS/Clustering/Clustering_CEx_dPSI10/ORF_Disruption/")
-Plot_ONTO(df_superonto = SUPERONTO_EX, df_supersuperonto = SSUPERONTO_EX,
-          conditions_to_plot = rownames(SUPERONTO_EX), palette_superonto = viridis(6))
+# Plot_ONTO(df_superonto = SUPERONTO_EX, df_supersuperonto = SSUPERONTO_EX,
+#           conditions_to_plot = rownames(SUPERONTO_EX), palette_superonto = viridis(6))
 
 ## OUTPUT TABLES CASSETTE EXONS
 # write.table(ONTOGENY_EX, file= "NumbersONTO_ONTOGENY.txt", sep="\t", quote =F)
@@ -159,9 +159,15 @@ Plot_ONTO(df_superonto = SUPERONTO_EX, df_supersuperonto = SSUPERONTO_EX,
 #   write.csv(cl_Data_VTS_ORF[[j]], file=paste("cl_",j,"_Data_ORF.csv",sep = ""),row.names = F)
 # }
 
+## EXPORT SUPP.TABLE1
+    out <- do.call(rbind,cl_Data_VTS_ORF) 
+    out_s1 <- out[,c(STDcols,PSIcols_B,"absMax_dPSI","Cluster","MEM.SHIP","SUPERONTO")]
+    dim(out_s1)
+    setwd("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/1601 CEBPa_NEW/VASTTOOLS_v2.2_FINAL_Mm10/")
+    write.table(out_s1, file="Vivori_SuppTable1.txt",sep="\t",row.names = F,quote = F)
+    
 
 ## STATS ON SUPERONTO
-
 SUPERONTO_table <- SUPERONTO_EX
 which_cluster <- "clVTS_4"
 which_prediction <- "CDS_DISR_uEXC"
@@ -186,3 +192,6 @@ FisherTest_ORF(SUPERONTO_table = SUPERONTO_EX,
                which_cluster = "clVTS_12", which_prediction = "CDS_PROT")
 FisherTest_ORF(SUPERONTO_table = SSUPERONTO_EX, 
                which_cluster = "clVTS_12", which_prediction = "CDS_DISR")
+
+
+

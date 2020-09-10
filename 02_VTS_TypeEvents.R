@@ -209,7 +209,16 @@ unlist(lapply(B_diffEV_comparisons$dPSI10, function(x) nrow(x)))[1:7] == unlist(
   B_diffEV_comparisons_Bcells_EV           
  
   
-  
+## EXPORT SUPP.TABLE2 
+  out  <- merge(M_diffEV_list$dPSI10$CEx, B_diffEV_list$dPSI10$CEx, by=c(STDcols,PSIcols,Qcols),all.x=T)
+  out_s2 <- out[,c(STDcols,PSIcols_M,"absMax_dPSI.x","absMax_dPSI.y")] %>%
+    mutate(absMax_dPSI.y = replace(absMax_dPSI.y, !is.na(absMax_dPSI.y), "TRUE")) %>%
+    mutate(absMax_dPSI.y = replace(absMax_dPSI.y, is.na(absMax_dPSI.y), "FALSE")) %>%
+    rename("absMax_dPSI.x" = "absMax_dPSI") %>%
+    rename("absMax_dPSI.y" = "Overlap_Bcell")
+  head(out_s2)
+  setwd("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/1601 CEBPa_NEW/VASTTOOLS_v2.2_FINAL_Mm10/")
+  write.table(out_s2, file="Vivori_SuppTable2.txt",sep="\t",row.names = F,quote = F)
   
   
   
