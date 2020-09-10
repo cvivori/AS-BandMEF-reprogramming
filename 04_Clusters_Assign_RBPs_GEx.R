@@ -83,7 +83,7 @@ setwd("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/1601 CEBPa_NEW/VAST
 gRBPs_B_CPMs_av_fil_scaled <- RBPs_B_CPMs_av_fil_scaled 
 rownames(gRBPs_B_CPMs_av_fil_scaled) <- ENS2Gene[which(ENS2Gene$ENSGID %in% rownames(RBPs_B_CPMs_av_fil_scaled)),"GeneName"]
 gRBPs_B_CPMs_av_fil <- RBPs_B_CPMs_av_fil
-rownames(gRBPs_B_CPMs_av_fil_scaled) <- ENS2Gene[which(ENS2Gene$ENSGID %in% rownames(RBPs_B_CPMs_av_fil)),"GeneName"]
+rownames(gRBPs_B_CPMs_av_fil) <- ENS2Gene[which(ENS2Gene$ENSGID %in% rownames(RBPs_B_CPMs_av_fil)),"GeneName"]
 gSPLs_B_CPMs_av_fil_scaled <- SPLs_B_CPMs_av_fil_scaled
 rownames(gSPLs_B_CPMs_av_fil_scaled) <- ENS2Gene[which(ENS2Gene$ENSGID %in% rownames(SPLs_B_CPMs_av_fil_scaled)),"GeneName"]
 
@@ -166,25 +166,24 @@ Plot_posneg_B_regulators(Reg_BM_CPMs,prefix = "", highlight_genes = c("Cpsf3","T
 # }
 
 
-# ## MAKE TABLEs FOR SUPPLEMENTARIES
-# # RBP_members_pos_toprint=lapply(RBP_members_pos_cl, function(x) as.data.frame(gRBPs_fil_B_CPMs_av[x,]))
-#   # RBP_members_neg_toprint=lapply(RBP_members_neg_cl, function(x) as.data.frame(gRBPs_fil_B_CPMs_av[x,]))
-#   RBP_members_pos_toprint=RBP_members_neg_toprint=list()
-#   for (c in c(1:i)) { 
-#     if (length(RBP_members_pos_cl[[c]])>1) {
-#       RBP_members_pos_toprint[[c]] = as.data.frame(gRBPs_fil_B_CPMs_av[RBP_members_pos_cl[[c]],])
-#     } else if (length(RBP_members_pos_cl[[c]])==1) {
-#       RBP_members_pos_toprint[[c]] = as.data.frame(t(gRBPs_fil_B_CPMs_av[RBP_members_pos_cl[[c]],])) } 
-#     RBP_members_pos_toprint[[c]]$Cluster = rep(c,nrow(RBP_members_pos_toprint[[c]]))
-#     RBP_members_pos_toprint[[c]]$Membership = RBPs_memberships_pos[RBP_members_pos_cl[[c]],c]
-#     if (length(RBP_members_neg_cl[[c]])>1) {
-#       RBP_members_neg_toprint[[c]] = as.data.frame(gRBPs_fil_B_CPMs_av[RBP_members_neg_cl[[c]],])
-#     } else if (length(RBP_members_neg_cl[[c]])==1) {
-#       RBP_members_neg_toprint[[c]] = as.data.frame(t(gRBPs_fil_B_CPMs_av[RBP_members_neg_cl[[c]],])) } 
-#     RBP_members_neg_toprint[[c]]$Cluster = rep(c,nrow(RBP_members_neg_toprint[[c]]))
-#     RBP_members_neg_toprint[[c]]$Membership = RBPs_memberships_neg[RBP_members_neg_cl[[c]],c]
-#   }
-# # setwd("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/1601 CEBPa_NEW/VASTTOOLS_v2.2_FINAL_Mm10/B2iPS/Clustering/Clustering_CEx_dPSI10/RBP_membership/")
-# # write.table(x = do.call(rbind,RBP_members_pos_toprint), file = "RBPs_pos_CPMs_ClusterMembership.txt", quote=F, row.names = T,col.names=NA,sep = "\t")
-# # write.table(x = do.call(rbind,RBP_members_neg_toprint), file = "RBPs_neg_CPMs_ClusterMembership.txt", quote=F, row.names = T,col.names=NA,sep = "\t")
-  
+## MAKE SUPP.TABLE 3
+# NB. Clusters have been renamed arbitrarily to follow the order of the manuscript 
+cluster_correspondence <- c("Cluster_05","Cluster_10","Cluster_03","Cluster_01","Cluster_08","Cluster_12","Cluster_07","Cluster_09","Cluster_04","Cluster_02","Cluster_11","Cluster_06")
+
+RBP_members_pos_toprint=RBP_members_neg_toprint=list()
+  for (c in c(1:i)) {
+    if (length(RBP_members_pos_cl[[c]])>=1) {
+      RBP_members_pos_toprint[[c]] = gRBPs_B_CPMs_av_fil[RBP_members_pos_cl[[c]],]
+    }
+    RBP_members_pos_toprint[[c]]$Cluster = rep(cluster_correspondence[c],nrow(RBP_members_pos_toprint[[c]]))
+    RBP_members_pos_toprint[[c]]$Membership = RBPs_memberships_pos[RBP_members_pos_cl[[c]],c]
+    if (length(RBP_members_neg_cl[[c]])>=1) {
+      RBP_members_neg_toprint[[c]] = gRBPs_B_CPMs_av_fil[RBP_members_neg_cl[[c]],]
+    } 
+    RBP_members_neg_toprint[[c]]$Cluster = rep(cluster_correspondence[c],nrow(RBP_members_neg_toprint[[c]]))
+    RBP_members_neg_toprint[[c]]$Membership = RBPs_memberships_neg[RBP_members_neg_cl[[c]],c]
+  }
+setwd("~/Dropbox (CRG ADV)/Personal_Claudia/Cl@udia/PhD/Data/1601 CEBPa_NEW/VASTTOOLS_v2.2_FINAL_Mm10/")
+  # write.table(x = do.call(rbind,RBP_members_pos_toprint), file="Vivori_SuppTable3_pos.txt", quote = F, row.names = T,col.names=NA,sep = "\t")
+  # write.table(x = do.call(rbind,RBP_members_neg_toprint), file="Vivori_SuppTable3_neg.txt", quote = F, row.names = T,col.names=NA,sep = "\t")
+
