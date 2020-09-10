@@ -15,8 +15,9 @@
 **03. Plots**
 - Plot heatmap with correlation of B cell reprogramming stages
 - Plot types of AS events (area plot, barplot and heatmap)
-- Plot heatmaps of scaled PSI values of differential CEx
+- Plot heatmaps of scaled PSI values of differential cassette exons
 - Plot PCA of B cell and MEFs reprogramming on most variable genes/exons
+- Plot Venn Diagrams with overlaps between AS events in B cell and MEFs reprogramming
 - Plot heatmap of scaled expression of RNA-binding proteins involved in pluripotency (from Han et al., 2013), reprogramming or development.
 
 **04. Clustering**
