@@ -1,4 +1,5 @@
 #!/bin/bash
+# See https://github.com/vastgroup/vast-tools
 
 #  VAST_TOOLS ALIGN, MM10
 

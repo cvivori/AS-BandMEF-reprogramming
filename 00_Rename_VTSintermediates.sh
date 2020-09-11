@@ -1,4 +1,5 @@
 #!/bin/bash
+# See https://github.com/vastgroup/vast-tools
 
 rename "B_1_12474_GCCAAT_read1" "B_Bcells_1" vast_out/to_combine/*
 rename "B_2_12475_ACAGTG_read1" "B_Bcells_2" vast_out/to_combine/*
