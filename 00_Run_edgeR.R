@@ -1,6 +1,11 @@
 require(edgeR)
 require(org.Mm.eg.db)
 
+## Mapping was performed with STAR v2.7.1a with the following parameters:
+# --limitGenomeGenerateRAM 31000000000 --limitBAMsortRAM 31000000000 --runThreadN 10 --readFilesCommand zcat 
+# --outSJfilterReads Unique --outFilterType BySJout --outFilterMultimapNmax 10 --alignSJoverhangMin 6 --alignSJDBoverhangMin 3 
+# --outFilterMismatchNoverLmax 0.1 --alignIntronMin 20 --alignIntronMax 1000000 --outSAMstrandField intronMotif --outFilterIntronMotifs RemoveNoncanonicalUnannotated 
+# --outSAMtype BAM SortedByCoordinate --outWigType bedGraph --seedSearchStartLmax 50 --quantMode GeneCounts
 
 ## READ COUNT FILES FROM STAR
 setwd("~/CEBPa_NEW/EdgeR_GEx/")
