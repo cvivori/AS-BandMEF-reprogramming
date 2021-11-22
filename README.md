@@ -3,17 +3,24 @@ Analysis of the alternative splicing (AS) changes in B cell reprogramming, corre
 Published in [Vivori et al., 2020](https://www.biorxiv.org/content/10.1101/2020.09.17.299867v1).
 
 ### 00. Run vast-tools and edgeR and apply initial filtering
-- Datasets:
+##### Datasets:
   - B cell reprogramming dataset: Stadhouders et al., 2018.
   - MEF reprogramming dataset: Cieply et al., 2016.
   - List of RNA-binding proteins (RBPs) and splicing-associated RBPs: generated from Uniprot ([RBP-SPL_Lists](https://github.com/cvivori/AS-BandMEF-reprogramming/tree/master/RBP-SPL_Lists)).
   
-- Alternative splicing analysis ([00_Run_VTS.sh](00_Run_VTS.sh)):
-  - `Vast-tools` v2.2.2 align (mm10), combine, compare. See [vast-tools webpage](https://github.com/vastgroup/vast-tools) for details.
-  - Filtering of vast-tools output for reads coverage with [VTS_INCL_filtering.R](https://github.com/cvivori/useful-cluster-scripts/blob/master/README.md#vts_incl_filteringr), to consider only AS events with a minimum of 10 actual reads per sample (0 “N” values allowed for each dataset).
-  - Extension of the filtered INCLUSION tables, including all the AS events differentially spliced in at least one comparison of each dataset (and their dPSI in all the comparisons). See [VTS_add_dPSI_toINCL.R](https://github.com/cvivori/useful-cluster-scripts/blob/master/README.md#vts_add_dpsi_toinclr).
+##### Alternative splicing analysis:
+  - `Vast-tools` v2.2.2 align (mm10), combine, compare with ([00_Run_VTS.sh](00_Run_VTS.sh)). See [vast-tools webpage](https://github.com/vastgroup/vast-tools) for details.
+  - Run `vast-tools compare` on all possible couples of samples for a big dataset with [VTS_run_compare_all_couples.pl](https://github.com/cvivori/AS-BandMEF-reprogramming/blob/master/00_VTS_Scripts/VTS_run_compare_all_couples.pl). Run `perl VTS_run_compare_all_couples.pl` to show help message.
+  - Filtering of vast-tools output for reads coverage with [VTS_INCL_filtering.R](https://github.com/cvivori/AS-BandMEF-reprogramming/blob/master/00_VTS_Scripts/VTS_INCL_filtering.R), to consider only AS events with a minimum of 10 actual reads per sample (0 “N” values allowed for each dataset).  
+    - [VTS_INCL_filtering.R](https://github.com/cvivori/AS-BandMEF-reprogramming/blob/master/00_VTS_Scripts/VTS_INCL_filtering.R) filters `vast-tools combine` output (INCLUSION table) for reads coverage. A maximum number of “N” values (less than 10 actual reads) is allowed in the quality score columns of the selected samples (Score 1: Read Coverage, see [vast-tools combine output format](https://github.com/vastgroup/vast-tools#combine-output-format)). Run `Rscript --vanilla VTS_INCL_filtering.R -h` to show help message.  
+    *Outputs:* two filtered INCLUSION tables (with and without quality scores).
+  - Extension of the filtered INCLUSION tables, including all the AS events differentially spliced in at least one comparison of each dataset (and their dPSI in all the comparisons).  
+    - [VTS_add_dPSI_toINCL.R](https://github.com/cvivori/AS-BandMEF-reprogramming/blob/master/00_VTS_Scripts/VTS_add_dPSI_toINCL.R) creates a union of `vast-tools combine` output (INCLUSION table) and multiple `vast-tools compare` outputs (DiffAS tables). It generates an extended version of the INCLUSION table, including all the events differentially spliced in at least one comparison (and their dPSI in all the comparisons). Run `Rscript --vanilla VTS_add_dPSI_toINCL.R -h` to show help message.  
+    *Outputs*: 
+        - If the input is the FILTERED INCLUSION table (see VTS_INCL_filtering.R), the output is a table with ALL CORRECTLY MAPPED events in the dataset (with dPSI from DiffAS files). 
+        - If the input is the original INCLUSION table, the output is a table with ALL events of the inclusion table (with dPSI from DiffAS files).
 
-- Gene Expression analysis ([00_Run_edgeR.R](00_Run_edgeR.R)):
+##### Gene Expression analysis ([00_Run_edgeR.R](00_Run_edgeR.R)):
   - Import of gene counts (from STAR mapping) 
   - Filtering for minimum 5 cpms in at least in 33% of samples (5 for B cell reprogramming, 6 for MEF reprogramming)
   - Calculation of cpm values and differential expression analysis.
